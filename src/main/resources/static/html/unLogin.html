@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        div.container {
+            width: 100%;
+            height: 100%;
+        }
+
+        div.loginDiv {
+            width: 398px;
+            height: 500px;
+            background: lightgray;
+            margin: 50px auto;
+            border: 1px solid lightgray;
+        }
+
+        div.login-top {
+            height: 165px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            margin-top: 45px;
+            color: white;
+        }
+
+        span.login-title {
+            font-size: 24px;
+        }
+
+        div .login-form {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        div .login-form input {
+            width: 300px;
+            margin: 0px auto;
+        }
+
+    </style>
+
+    <script>
+        $(function () {
+            /**
+             * 校验用户名格式
+             */
+            $("#userId").change(function () {
+                //准备正则表达式
+                var regName = /^[\u2E80-\u9FFFa-zA-Z0-9_-]{2,12}$/;
+                var content = $(this).val();
+                //校验用户名
+                if (!regName.test(content)) {
+                    $("#ErrorMsg").text("用户名只能是2-12位中文，数字或字母的组合");
+                    $("#ErrorMsg").css("color", "red");
+                    $("#submitBtn").attr("nameError","true");
+                } else {
+                    $("#ErrorMsg").text("");
+                    $("#submitBtn").attr("nameError","false");
+                }
+            });
+
+            /**
+             * 校验密码格式
+             */
+            $("#password").change(function () {
+                //准备正则表达式
+                var regPassword = /^[0-9a-zA-Z!@#$%^&*]{4,16}$/;
+                var content = $(this).val();
+                //校验密码
+                if (!regPassword.test(content)) {
+                    $("#ErrorMsg").text("密码只能是4-16位数字，字母或特殊字符的组合");
+                    $("#ErrorMsg").css("color", "red");
+                    $("#submitBtn").attr("pwdError","true");
+                } else {
+                    $("#ErrorMsg").text("");
+                    $("#submitBtn").attr("pwdError","false");
+                }
+            });
+
+            /**
+             * 点击提交按钮
+             */
+            $("#submitBtn").click(function(){
+                //用户名密码非空判断
+                if($("#userId").val().lenght==0 || $("#password").val().length==0) {
+                    $("#ErrorMsg").text("用户名密码不能为空！");
+                    $("#ErrorMsg").css("color", "red");
+                    return false;
+                }
+                return true;
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="navitagorDiv">
+
+</div>
+
+<div class="container">
+    <div class="loginDiv">
+        <div class="login-top">
+            <span class="login-title">登录测试</span>
+            <div class="login-pic">
+                <span id="ErrorMsg" class="help-block"></span>
+            </div>
+        </div>
+
+        <div class="login-form">
+            <form action="login" method="post">
+                <input type="text" placeholder="用户名" id="userId" name="userId" class="form-control"><br>
+                <input type="password" id="password" placeholder="密码" name="password" class="form-control"><br>
+                <input type="submit" id="submitBtn" value="登录" class="form-control"
+                       style="width:70px;background:#007bff;color:white;">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
