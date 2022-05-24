@@ -89,6 +89,12 @@
             <artifactId>java-jwt</artifactId>
             <version>3.18.3</version>
         </dependency>
+        <!-- ROCKETMQ-->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>4.9.3</version>
+        </dependency>
 
     </dependencies>
 
