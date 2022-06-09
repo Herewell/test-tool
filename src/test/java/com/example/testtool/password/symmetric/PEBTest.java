@@ -5,7 +5,7 @@
  */
 package com.example.testtool.password.symmetric;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+//import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
