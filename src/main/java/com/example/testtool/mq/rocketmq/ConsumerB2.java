@@ -14,6 +14,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.util.List;
+import java.util.Random;
 
 public class ConsumerB2 {
     public static void main(String[] args) throws InterruptedException, MQClientException {
@@ -26,12 +27,33 @@ public class ConsumerB2 {
 
         // Subscribe one more more topics to consume.
         consumer.subscribe("topicTest1", "*");
+        consumer.setConsumeThreadMin(4);
+        consumer.setConsumeThreadMax(4);
+        consumer.setPullBatchSize(3);
+        consumer.setConsumeMessageBatchMaxSize(1);
+        consumer.setPullInterval(10000);
+        int min = 1;
+        int max = 10;
+
+        Random random = new Random();
+
+
+
         // Register callback to execute on arrival of messages fetched from brokers.
         consumer.registerMessageListener(new MessageListenerConcurrently() {
 
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
                                                             ConsumeConcurrentlyContext context) {
+                System.out.println("msgssss：　" + msgs.size());
+//                int value = random.nextInt(max + min) + min;
+//                System.out.println(value);
+//                try {
+//                    Thread.sleep(10*1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+
                 System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
