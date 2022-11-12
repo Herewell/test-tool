@@ -24,8 +24,8 @@ public class Producer {
         producer.setNamesrvAddr("114.132.232.241:9876");
         //Launch the instance.
         producer.start();
-        producer.setDefaultTopicQueueNums(8);
-        for (int i = 0; i < 800; i++) {
+        producer.setDefaultTopicQueueNums(5);
+        for (int i = 0; i < 200; i++) {
             //Create a message instance, specifying topic, tag and message body.
             Message msg = new Message("topicTest1" /* Topic */,
                     "TagA" /* Tag */,

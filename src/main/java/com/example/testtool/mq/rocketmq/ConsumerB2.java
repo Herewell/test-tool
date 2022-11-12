@@ -27,11 +27,23 @@ public class ConsumerB2 {
 
         // Subscribe one more more topics to consume.
         consumer.subscribe("topicTest1", "*");
-        consumer.setConsumeThreadMin(4);
-        consumer.setConsumeThreadMax(4);
-        consumer.setPullBatchSize(3);
-        consumer.setConsumeMessageBatchMaxSize(1);
-        consumer.setPullInterval(10000);
+        consumer.setConsumeThreadMin(2);
+        consumer.setConsumeThreadMax(2);
+        /**
+         * 分配给这个consumer的每个queue都会拉取这个数量
+         * 举个例子：这个topicTest1一共有5个读写队列。启动了两个consumer，那么consumer1分配2个，consumer2分配3个（有算法）
+         * 那么consumer2每次拉10*3个，两个消费线程，每个消费5个。consumer1每次拉去10*2个，两个消费线程，每次消费5个
+         * 消费者按照一定的频率拉取消息，当超过一定的阈值的消息未被消费，那么就会触发流控，不再从broker中拉取新的消息（org.apache.rocketmq.client.impl.consumer.DefaultMQPushConsumerImpl#pullMessage(org.apache.rocketmq.client.impl.consumer.PullRequest)）
+         */
+        consumer.setPullBatchSize(10);
+        /**
+         * 以5个为一批，有一个失败，则全部失败
+         */
+        consumer.setConsumeMessageBatchMaxSize(5);
+        /**
+         * 每次向broker拉取消息的间隔时间
+         */
+        consumer.setPullInterval(60000);
         int min = 1;
         int max = 10;
 
@@ -45,7 +57,12 @@ public class ConsumerB2 {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
                                                             ConsumeConcurrentlyContext context) {
-                System.out.println("msgssss：　" + msgs.size());
+
+                System.out.println(Thread.currentThread().getName() + "开始消费 " + msgs.size());
+                msgs.forEach(msg -> {
+                    System.out.println(Thread.currentThread().getName() +  "consumer " + new String(msg.getBody()));
+                });
+                System.out.println(Thread.currentThread().getName() + "结束消费 " + msgs.size());
 //                int value = random.nextInt(max + min) + min;
 //                System.out.println(value);
 //                try {
@@ -53,8 +70,6 @@ public class ConsumerB2 {
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-
-                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
